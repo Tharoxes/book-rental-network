@@ -25,18 +25,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name= "user" )
+@Table(name= "_user" )
 @EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails, Principal{
 	
@@ -45,7 +45,7 @@ public class User implements UserDetails, Principal{
 	private Integer id;
 	private String firstname;
 	private String lastname;
-	private LocalDate dateBirth;
+	private LocalDate dateOfBirth;
 	@Column(unique = true)
 	private String email;
 	private String password;
@@ -63,10 +63,7 @@ public class User implements UserDetails, Principal{
 	@Column(insertable = false)
 	private LocalDateTime lastModifiedDate;
 
-	@Override
-	public String getName() {
-		return email;
-	}
+
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -106,7 +103,16 @@ public class User implements UserDetails, Principal{
 		return enabled;
 	}
 	
-	private String getFullName() {
+	private String fullName() {
+		return getFirstname() + " " + getLastname();
+	}
+	
+	@Override
+	public String getName() {
+		return email;
+	}
+	
+	public String getFullName() {
 		return firstname + " " + lastname;
 	}
 
